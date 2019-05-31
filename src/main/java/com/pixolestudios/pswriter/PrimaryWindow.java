@@ -1,14 +1,7 @@
 package main.java.com.pixolestudios.pswriter;
 
-import javax.swing.JFrame;
-import javax.swing.JMenu;
-import javax.swing.JMenuBar;
-import javax.swing.JMenuItem;
-import javax.swing.JPanel;
-import javax.swing.JScrollPane;
-import javax.swing.JTextArea;
-import java.awt.BorderLayout;
-import java.awt.Font;
+import javax.swing.*;
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
@@ -21,7 +14,7 @@ public class PrimaryWindow extends JFrame implements ActionListener {
 
     private JTextArea textArea;
     private JScrollPane scrollPane;
-    private JPanel panel;
+    private JPanel mainPanel;
     private JMenuBar menuBar;
     private JMenu fileMenu, editMenu, viewMenu, aboutMenu;
     //File menu items
@@ -35,7 +28,9 @@ public class PrimaryWindow extends JFrame implements ActionListener {
         setupScrollbar();
         setupMenuBar();
 
-        add(panel);
+        add(mainPanel);
+        textArea.getDocument().addDocumentListener(new AutoComplete(textArea));
+        textArea.getDocument().putProperty("name", "Text Area");
     }
 
     private void setupWindow() {
@@ -54,8 +49,8 @@ public class PrimaryWindow extends JFrame implements ActionListener {
 
     private void setupScrollbar() {
         scrollPane = new JScrollPane(textArea);
-        panel = new JPanel(new BorderLayout());
-        panel.add(scrollPane);
+        mainPanel = new JPanel(new BorderLayout());
+        mainPanel.add(scrollPane);
     }
 
     private void setupMenuBar() {
