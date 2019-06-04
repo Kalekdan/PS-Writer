@@ -27,6 +27,14 @@ public class AutoComplete implements DocumentListener {
         String lastWord = wordsArray[wordsArray.length - 1];
         String keyWordBeingTyped = checkIfTypingWord(lastWord);
         System.out.print(keyWordBeingTyped);
+        Runnable doCompleteWord = new Runnable() {
+            public void run() {
+                if (!keyWordBeingTyped.isEmpty()){
+                    textArea.setText(textArea.getText().substring(0, textArea.getText().length() - lastWord.length()) + keyWordBeingTyped);
+                }
+            }
+        };
+        SwingUtilities.invokeLater(doCompleteWord);
     }
 
     /**
@@ -39,20 +47,20 @@ public class AutoComplete implements DocumentListener {
     private String checkIfTypingWord(String lastWord) {
         String closestMatch = keywords.higherKey(lastWord);
         if (closestMatch != null && closestMatch.startsWith(lastWord)) {
-            return keywords.get(keywords.higherKey(lastWord)) + "\n";
+            return keywords.get(keywords.higherKey(lastWord));
         }
         return "";
     }
 
     @Override
     public void removeUpdate(DocumentEvent e) {
-        System.out.println(e.getType());
+       // System.out.println(e.getType());
 
     }
 
     @Override
     public void changedUpdate(DocumentEvent e) {
-        System.out.println(e.getType());
+        //System.out.println(e.getType());
 
     }
 
