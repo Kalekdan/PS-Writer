@@ -1,35 +1,47 @@
 package main.java.com.pixolestudios.pswriter;
 
-import javax.swing.JTextArea;
+import javax.swing.*;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
-import javax.swing.text.BadLocationException;
-import java.util.ArrayList;
-import java.util.Collections;
+import java.util.TreeMap;
 
 public class AutoComplete implements DocumentListener {
 
-    private ArrayList<String> keywords = new ArrayList<String>();
+    // TreeMap <Alias, ActualString>
+    TreeMap<String, String> keywords = new TreeMap<String, String>();
     private JTextArea textArea;
 
 
     public AutoComplete(JTextArea textArea) {
         this.textArea = textArea;
-        keywords.add("brill");
-        keywords.add("test");
-        keywords.add("another");
 
-        Collections.sort(keywords);
+        keywords.put("mc", "charactername");
+        keywords.put("test", "test");
+        keywords.put("another", "Another");
+        System.out.println(keywords);
     }
 
     @Override
     public void insertUpdate(DocumentEvent e) {
-//        System.out.println(e.getType());
-        try {
-            System.out.print(textArea.getText(e.getOffset(),1));
-        } catch (BadLocationException e1) {
-            e1.printStackTrace();
+        String[] wordsArray = textArea.getText().split("\\s+");
+        String lastWord = wordsArray[wordsArray.length - 1];
+        String keyWordBeingTyped = checkIfTypingWord(lastWord);
+        System.out.print(keyWordBeingTyped);
+    }
+
+    /**
+     * Checks if word being typed is a keyword
+     * If it is, returns keyword, otherwise returns empty string
+     *
+     * @param lastWord last word typed
+     * @return keyword if found
+     */
+    private String checkIfTypingWord(String lastWord) {
+        String closestMatch = keywords.higherKey(lastWord);
+        if (closestMatch != null && closestMatch.startsWith(lastWord)) {
+            return keywords.get(keywords.higherKey(lastWord)) + "\n";
         }
+        return "";
     }
 
     @Override
@@ -44,10 +56,9 @@ public class AutoComplete implements DocumentListener {
 
     }
 
-    protected void addKeyWord(String word) {
-        if (!keywords.contains(word)) {
-            keywords.add(word);
-            Collections.sort(keywords);
+    protected void addKeyWord(String alias, String actualWord) {
+        if (!keywords.containsKey(alias)){
+            keywords.put(alias, actualWord);
         }
     }
 
