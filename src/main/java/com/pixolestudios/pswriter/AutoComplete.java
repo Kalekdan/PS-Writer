@@ -1,6 +1,7 @@
 package main.java.com.pixolestudios.pswriter;
 
-import javax.swing.*;
+import javax.swing.JTextArea;
+import javax.swing.SwingUtilities;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 import java.util.TreeMap;
@@ -26,7 +27,6 @@ public class AutoComplete implements DocumentListener {
         String[] wordsArray = textArea.getText().split("\\s+");
         String lastWord = wordsArray[wordsArray.length - 1];
         String keyWordBeingTyped = checkIfTypingWord(lastWord);
-        System.out.print(keyWordBeingTyped);
         Runnable doCompleteWord = new Runnable() {
             public void run() {
                 if (!keyWordBeingTyped.isEmpty()){
